@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/* The sidebar menu */
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    padding-top: 40px;
+    border-radius: 10px;
+}
+
+.user-name {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px; /* Отступ между именем и линией */
+    color: white;
+}
+
+.line {
+    width: 90%; /* Ширина линии */
+    opacity: 0.8;
+    margin: 20px auto 20px; /* Центрирование линии и отступ снизу */
+    border: 1px solid white;
+}
+
+.icon {
+    width: 22px; /* Ширина иконки */
+    height: 22px; /* Высота иконки */
+    margin-right: 10px; /* Отступ между иконкой и текстом */
+}
+
+
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    margin: 5px 7px 5px 7px;
+    height: 40px;
+    text-decoration: none;
+    font-family: "Roboto";
+    font-size: 16px;
+    color: white;
+    /* opacity: 0.9; */
+    display: block;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: white;
+    border-radius: 8px;
+    opacity: 1;
+    /* background-color: #302f34; */
+    border: 1px solid white;
+    /* box-shadow: 0 0 3px 3px #2660ec; */
+    /* scale: 0.99; */
+}
+
+.log-out {
+    position: fixed;
+    width: 236px;
+    /* text-align: center; */
+    bottom: 30px; /* Расположение ссылки на 100 пикселей от нижнего края */
+    height: 45px;
+}
+
+
+/* Style page content */
+main {
+    margin-left: 260px;
+    margin-right: 10px; /* Ширина бокового меню */
+    padding: 15px;
+}
+
+.transport-table {
+    border: none;
+}
+
+.justify-content-md-center {
+    border: 2px solid #000000;
+    border-radius: 20px;
+}
+
+.form-control {
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+}
+
+.form-control:hover {
+    border: 2px solid black;
+}
+
+.form-control:focus {
+    border-color: transparent;
+    box-shadow: none;
+    border: 2px solid black;
+}
+
+.dt-info {
+    display: none;
+}
+
+.dt-empty-footer {
+    padding: 0 15px 0 15px;
+}
+
+.booking-cont {
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.btn-primary {
+    background-color: #fff;
+    border: 2px solid black;
+    border-radius: 8px;
+    color: #000000;
+}
+
+.btn-primary:hover, .btn-primary:focus{
+    background-color: #2660ec;
+    color: white;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.form-control-file {
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+/* .optimal-tr-cont {
+    display: none;
+} */
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
