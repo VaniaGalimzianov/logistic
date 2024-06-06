@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistic</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.6/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="static/styles/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/main.css">
+    
+
+    <link rel="shortcut icon" href="static/icons/bounding-box-circles.svg">
+    
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"> -->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.6/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.6/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart-js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+<body>
+    <!-- Вертикальное меню -->  
+    <div class="sidenav">
+        <a href="index.html" class="user">
+            <img src="static/icons/person-circle.svg" class="icon user">
+            {{ name }}
+        </a>
+        <hr class="line">
+        <a href="Просмотр">
+            <img src="static/icons/calendar.svg" class="icon cal">
+            Просмотр
+        </a>
+        <a href="Бронь">
+            <img src="static/icons/box.svg" class="icon box">
+            Бронь
+        </a>
+        <a href="Админ">
+            <img src="static/icons/house-gear.svg" class="icon gear">
+            Админ
+        </a>
+        <a href="Выход" class="log-out">
+            <img src="static/icons/box-arrow-in-left.svg" class="icon">
+            Выход
+        </a>
+    </div>
+    <main>
+        <div id="content"></div>
+    </main>    
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {  
+    const links = document.querySelectorAll('.sidenav a');
+    let prevIcon = null;
+
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const icon = link.querySelector('.icon');
+            const iconName = icon.getAttribute('src').split('/').pop(); // Получаем имя иконки из пути
+
+            if (prevIcon !== null && prevIcon === icon) {
+                // Ничего не делаем, если нажата та же кнопка
+            } else {
+                if (prevIcon !== null) {
+                    prevIcon.setAttribute('src', prevIcon.getAttribute('src').replace('-fill', '')); // Возвращаем предыдущую иконку к исходному состоянию
+                }
+                var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            document.getElementById("content").innerHTML = xhr.responseText;
+                        }
+                    };
+
+                if (iconName === 'calendar.svg') {
+                    icon.setAttribute('src', 'static/icons/calendar-fill.svg');
+                    xhr.open("GET", "/main/view", true);
+                    xhr.send();
+                    xhr.onload = function() {
+                        // Код для инициализации фильтров
+                        new DataTable('#transport', {
+                            responsive: true,
+                            paging: false,
+                            scrollCollapse: true,
+                            scrollY: '500px',
+                            "language": {
+                                "sSearch": "Поиск",
+                            }
+                        });
+                    };
+
+                    
+                } else if (iconName === 'box.svg') {
+                    icon.setAttribute('src', 'static/icons/box-fill.svg');
+                    xhr.open("GET", "/main/booking", true);
+                    xhr.send();
+                    
+                } else if (iconName === 'house-gear.svg') {
+                    icon.setAttribute('src', 'static/icons/house-gear-fill.svg');
+                    xhr.open("GET", "/main/admin", true);
+                    xhr.send();
+                    
+                } else if (iconName === 'box-arrow-in-left.svg') {
+                    window.location.replace("/register");
+                    // xhr.open("GET", "/register", true);
+                    // xhr.send();
+                }
+
+                prevIcon = icon;
+            }
+        });
+    });
+});
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.custom-container form');
+        
+        forms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Предотвращаем стандартное действие отправки формы
+
+                // Добавляем вашу логику обработки данных здесь
+
+                // Опционально: показываем сообщение об успешной отправке
+                const successMessage = document.createElement('p');
+                successMessage.textContent = 'Данные успешно отправлены!';
+                form.appendChild(successMessage);
+            });
+        });
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+    var optimal_table = $('#optimal_transport').DataTable({
+        columnDefs: [{
+            orderable: false,
+            targets: 0
+        }],
+        order: [[1, 'asc']]
+    });
+});
+
+async function selectAuto() {
+    var selectedTransport = {};
+
+    $('#optimal_transport tbody tr').each(function() {
+        var checkbox = $(this).find('input[type="checkbox"]');
+        console.log(checkbox);
+        if (checkbox.prop('checked')) {
+            var rowData = [];
+            $(this).find('td').each(function() {
+                rowData.push($(this).text());
+            });
+            selectedTransport['name'] = rowData[1];
+            selectedTransport['payload'] = rowData[2];
+            selectedTransport['length'] = rowData[3];
+            selectedTransport['width'] = rowData[4];
+            selectedTransport['height'] = rowData[5];
+        }
+    });
+
+    if (Object.keys(selectedTransport).length === 0) {
+        alert("Пожалуйста, выберите транспорт");
+        return;
+    }
+
+    console.log(selectedTransport);
+
+    try {
+        const response = await fetch('/main/booking/get_cars/update_info', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(selectedTransport)
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при отправке данных на сервер.');
+        }
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+</script>
+
+
+<script>
+    async function findTransport() {
+        const payload = document.getElementById('weightInput').value;
+        const dimensions = document.getElementById('dimensionInput').value;
+        console.log("[INFO]: FindTransport");
+
+        const data = {
+            payload: payload,
+            dimensions: dimensions,
+        };
+
+        try {
+            const response = await fetch('/main/booking/get_cars', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            .then(response => response.text())
+            .then(data => {
+                // Обновляем содержимое таблицы с данными о машинах
+                document.getElementById('optimal_transport').innerHTML = data;
+            });
+        } catch (error) {
+            console.error('There was a problem with your fetch operation:', error);
+        }
+    };
+
+</script>
+
+<script>
+    // Функция для отправки формы "manualForm" на сервер
+    async function addManual() {
+
+        let formData = {
+            name: document.getElementById('autoType').value,
+            payload: document.getElementById('capacity').value,
+            length: document.getElementById('length').value,
+            width: document.getElementById('width').value,
+            height: document.getElementById('height').value,
+        }
+        console.log(formData)
+
+        try {
+            const response = await fetch('/main/admin/add_car', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                console.log('Данные успешно отправлены на сервер');
+            } else {
+                console.error('Произошла ошибка при отправке данных на сервер');
+            }
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
+        }
+    };
+
+    // Функция для отправки файла из формы "fileForm" на сервер
+    async function addExcel(event) {
+        let fileInput = document.getElementById('excelFile');
+        let file = fileInput.files[0];
+        let formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/main/admin/add_car_excel', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                console.log('Файл успешно отправлен на сервер');
+            } else {
+                console.error('Произошла ошибка при отправке файла на сервер');
+            }
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
+        }
+    };
+
+</script>
+
+<!-- <script>
+    async function selectAuto() {
+        var table = $('#optimal-transport').DataTable();
+        var checkedData = [];
+
+        table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+            var data = this.data();
+            var checkbox = $(data[0]).find('input[type="checkbox"]')[0];
+            console.log(checkbox);
+
+            if (checkbox.checked) {
+                checkedData.push(data);
+            }
+        });
+
+        console.log(checkedData); // Вывод данных в консоль для дальнейшего использования
+
+    }
+
+</script> -->
+
+<!-- <script>
+   function selectAuto() {
+        var selectedRowsData = [];
+
+        $('#optional_transport tbody tr').each(function() {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            console.log(checkbox);
+            if (checkbox.prop('checked')) {
+                var rowData = [];
+                $(this).find('td').each(function() {
+                    rowData.push($(this).text());
+                });
+                selectedRowsData.push(rowData);
+            }
+        });
+
+        console.log(selectedRowsData);
+}
+
+</script> -->
+
+</body>
+</html>
+    

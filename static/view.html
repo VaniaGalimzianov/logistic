@@ -1,0 +1,26 @@
+
+<h2>Просмотр</h2>
+<table id="transport" class="table transport-table hover" style="width:100%">
+    <thead>
+        <tr>
+            <th>Авто</th>
+            <th>Грузоподъемность</th>
+            <th>Длина</th>
+            <th>Ширина</th>
+            <th>Высота</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.payload }}</td>
+                <td>{{ row.length }}</td>
+                <td>{{ row.width }}</td>
+                <td>{{ row.height }}</td>
+                <td>{% if row.status == 'Свободно' %}<span class="badge badge-success">{{ row.status }}</span>{% else %}<span class="badge badge-danger">{{ row.status }}</span>{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,102 @@
+<h1>Добавление нового авто</h1>
+<div class="mt-5 booking-cont">
+    <div class="row">
+        <div class="col-md-6 border-end">
+            <div class="custom-container">
+                <form id="manualForm">
+                    <div class="mb-3">
+                        <label for="autoType" class="form-label">Авто</label>
+                        <input type="text" class="form-control" id="autoType" name="autoType" placeholder="Пример: MAN TGX 18 480" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="capacity" class="form-label">Грузоподъемность</label>
+                        <input type="text" class="form-control" id="capacity" name="capacity" placeholder="Пример: 18000" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="length" class="form-label">Длина</label>
+                        <input type="text" class="form-control" id="length" name="length" placeholder="Пример: 18.0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="width" class="form-label">Ширина</label>
+                        <input type="text" class="form-control" id="width" name="width" placeholder="Пример: 2.4" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="height" class="form-label">Высота</label>
+                        <input type="text" class="form-control" id="height" name="height" placeholder="Пример: 2.5" required>
+                    </div>
+                    <button type="button" class="btn btn-primary manual-btn" onclick="addManual()">Отправить</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="custom-container">
+                <h3>Прикрепить файл</h3>
+                <form id="fileForm">
+                    <input type="file" accept=".xlsx" class="form-control-file" id="excelFile">
+                    <button type="button" class="btn btn-primary mt-3 file-btn" onclick="addExcel()">Отправить файл Excel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <script>
+        // Функция для отправки формы "manualForm" на сервер
+        document.querySelector('.btn.btn-primary.manual-btn').addEventListener('click', async function(event) {
+            event.preventDefault();
+    
+            let formData = {
+                name: document.getElementById('autoType').value,
+                payload: document.getElementById('capacity').value,
+                length: document.getElementById('length').value,
+                width: document.getElementById('width').value,
+                height: document.getElementById('height').value
+            }
+            console.log(formData)
+    
+            try {
+                const response = await fetch('https://127.0.0.1:8000/main/admin/add_car', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+    
+                if (response.ok) {
+                    console.log('Данные успешно отправлены на сервер');
+                } else {
+                    console.error('Произошла ошибка при отправке данных на сервер');
+                }
+            } catch (error) {
+                console.error('Произошла ошибка:', error);
+            }
+        });
+    
+        // Функция для отправки файла из формы "fileForm" на сервер
+        document.querySelector('.file-btn').addEventListener('click', async function() {
+            let fileInput = document.getElementById('excelFile');
+            let file = fileInput.files[0];
+            let formData = new FormData();
+            formData.append('file', file);
+    
+            try {
+                const response = await fetch('/main/admin/add_car', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                if (response.ok) {
+                    console.log('Файл успешно отправлен на сервер');
+                } else {
+                    console.error('Произошла ошибка при отправке файла на сервер');
+                }
+            } catch (error) {
+                console.error('Произошла ошибка:', error);
+            }
+        });
+    
+      </script>
+    
+</div>
+

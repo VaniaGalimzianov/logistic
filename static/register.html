@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logistic-Reg</title>
+<link rel="stylesheet" href="static/styles/reset.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/styles/reg.css">
+<link rel="shortcut icon" href="/icons/bounding-box-circles.svg">
+</head>
+<body>
+<div class="container">
+  <h2 class="reg">Вход</h2>
+
+  <div class="form-container">
+    <form id="loginForm">
+      <div class="form-group">
+        <input type="text" class="form-control" id="employeeCode" placeholder="Введите код сотрудника" required>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="password" placeholder="Введите пароль" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Войти</button>
+    </form>
+  </div>
+
+  
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+    
+        const formData = {
+            worker_code: document.getElementById('employeeCode').value,
+            password: document.getElementById('password').value
+        };
+        
+    
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+    
+        if (response.redirected) {
+          window.location.replace(response.url);
+        } else {
+            alert('Неверные учетные данные. Пожалуйста, попробуйте еще раз');
+        }
+    });
+    </script>
+
+</div>
+</body>
+</html>

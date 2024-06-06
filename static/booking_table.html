@@ -1,0 +1,23 @@
+<thead>
+    <tr>
+        <th>Выбрать</th>
+        <th>Авто</th>
+        <th>Грузоподъемность</th>
+        <th>Длина</th>
+        <th>Ширина</th>
+        <th>Высота</th>
+    </tr>
+</thead>
+<tbody>
+    {% for row in rows %}
+        <tr>
+            <td><input type="checkbox" class="select-transport"></td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.payload }}</td>
+            <td>{{ row.length }}</td>
+            <td>{{ row.width }}</td>
+            <td>{{ row.height }}</td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>

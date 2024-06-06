@@ -1,0 +1,68 @@
+<h2>Бронирование</h2>
+<div class="mt-5 booking-cont">
+    <form action="" class="booking-form"></form>
+        <div class="row">
+        
+            <div class="col-md-6">
+                <div class="custom-container">
+                    <div class="form-group">
+                        <label for="weightInput">Вес груза (кг)</label>
+                        <input type="text" class="form-control" id="weightInput" placeholder="Пример: 1530" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dimensionInput">Габариты груза (д, ш, в)</label>
+                        <input type="text" class="form-control" id="dimensionInput" placeholder=" Пример: 3.5, 2.8, 1.5" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-container">
+                    <div class="form-group">
+                        <label for="routeInput">Маршрут</label>
+                        <input type="text" class="form-control" id="routeInput" placeholder="Пример: Москва-Хабаровск" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateInput">Дата доставки</label>
+                        <input type="text" class="form-control" id="dateInput" placeholder="Пример: 01.01.2000" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-end mt-3">
+        <button type="button" class="btn btn-primary find-tr" onclick="findTransport()">Подобрать транспорт</button>
+    </div>
+</div>
+
+<div class="mt-3 booking-cont optimal-tr-cont" >
+    <table id="optimal_transport" class="table transport-table hover" style="width:100%">
+        <thead>
+            <tr>
+                <th>Выбрать</th>
+                <th>Авто</th>
+                <th>Грузоподъемность</th>
+                <th>Длина</th>
+                <th>Ширина</th>
+                <th>Высота</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td><input type="checkbox" class="select-transport"></td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.payload }}</td>
+                    <td>{{ row.length }}</td>
+                    <td>{{ row.width }}</td>
+                    <td>{{ row.height }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-end mt-3">
+        <button type="button" class="btn btn-primary" onclick="selectAuto()">Выбрать транспорт</button>
+    </div>
+    
+</div>
+
